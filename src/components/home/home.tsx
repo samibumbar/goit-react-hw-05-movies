@@ -21,7 +21,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="container-home">
-      <h1>Trending today</h1>
+      <h1>Trending todai</h1>
       <ul>
         {movies.map((movie) => (
           <li key={movie.id}>
