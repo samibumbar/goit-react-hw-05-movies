@@ -1,64 +1,58 @@
+import React, { Suspense, lazy } from "react";
 import {
-  FeedbackOptions,
-  Section,
-  Statistics,
-  Notification,
-} from "./components";
-import React, { useState } from "react";
-import styles from "./app.module.css";
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+  useLocation,
+  Link,
+} from "react-router-dom";
+import "./app.css";
 
-const App: React.FC = () => {
-  const [state, setState] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  });
+const Home = lazy(() => import("./components/home/home"));
+const Movies = lazy(() => import("./components/movie/movie"));
+const MovieDetails = lazy(
+  () => import("./components/movies-details/movies-details")
+);
+const Cast = lazy(() => import("./components/movies-details/cast"));
+const Reviews = lazy(() => import("./components/movies-details/reviews"));
 
-  const handleFeedback = (type: string) => {
-    const feedbackMap: Record<string, keyof typeof state> = {
-      "😊": "good",
-      "😐": "neutral",
-      "😢": "bad",
-    };
-
-    setState((prevState) => ({
-      ...prevState,
-      [feedbackMap[type]]: prevState[feedbackMap[type]] + 1,
-    }));
-  };
-
-  const countTotalFeedback = () => state.good + state.neutral + state.bad;
-
-  const countPositiveFeedbackPercentage = () => {
-    const total = countTotalFeedback();
-    return total > 0 ? Math.round((state.good / total) * 100) : 0;
-  };
-
-  const totalFeedback = countTotalFeedback();
+const Navbar: React.FC = () => {
+  const location = useLocation();
 
   return (
-    <div className={styles.containerFeedback}>
-      <Section title="Please leave feedback">
-        <FeedbackOptions
-          options={["😊", "😐", "😢"]}
-          onLeaveFeedback={handleFeedback}
-        />
-      </Section>
+    <nav className="nav-bar">
+      <Link to="/" className={location.pathname === "/" ? "active-link" : ""}>
+        Home
+      </Link>
+      <Link
+        to="/movies"
+        className={location.pathname.startsWith("/movies") ? "active-link" : ""}
+      >
+        Movies
+      </Link>
+    </nav>
+  );
+};
 
-      {totalFeedback > 0 ? (
-        <Section title="Statistics">
-          <Statistics
-            good={state.good}
-            neutral={state.neutral}
-            bad={state.bad}
-            total={totalFeedback}
-            positivePercentage={countPositiveFeedbackPercentage()}
-          />
-        </Section>
-      ) : (
-        <Notification message="There is no feedback" />
-      )}
-    </div>
+const App: React.FC = () => {
+  return (
+    <Router>
+      <div className="container">
+        <Navbar />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/movies" element={<Movies />} />
+            <Route path="/movies/:movieId" element={<MovieDetails />}>
+              <Route path="cast" element={<Cast />} />
+              <Route path="reviews" element={<Reviews />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </div>
+    </Router>
   );
 };
 

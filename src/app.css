@@ -1,0 +1,26 @@
+.container {
+  width: 100%;
+}
+.nav-bar {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  padding: 1rem 3rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.nav-bar a {
+  color: black;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.nav-bar a {
+  color: black;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.nav-bar a.active-link {
+  color: red;
+}
