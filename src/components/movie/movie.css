@@ -1,0 +1,11 @@
+.movies-container {
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+.movies-container input {
+  padding: 0.2rem 3rem;
+  border: none;
+}
+.movies-container button {
+  padding: 0.2rem 1.5rem;
+}
